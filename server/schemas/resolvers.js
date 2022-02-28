@@ -1,5 +1,5 @@
 const { User } = require("../models");
-
+const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     me: () => {
@@ -20,8 +20,9 @@ const resolvers = {
         return { message: "Wrong password!" };
       }
       // retrieve the token
+      const token = signToken(user);
 
-      return user;
+      return { user, token };
     },
 
     addUser: async (parent, args) => {
@@ -31,8 +32,7 @@ const resolvers = {
       }
 
       // retrieve the token
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoiQW1pci1GYXJkMjAyNSIsImVtYWlsIjoic2FhZGF0ZmFyZC5hbWlyQHlhaG9vLmNvbSIsIl9pZCI6IjYyMWI5YzIwOTg5OTg1MjQwY2U5ZmZiMSJ9LCJpYXQiOjE2NDU5ODkxMzMsImV4cCI6MTY0NTk5NjMzM30.nAwkuc0Phra5ONsNHN9k11jVFRV4ZAUjGRvm_3A2cro";
+      const token = signToken(user);
       return { token, user };
     },
   },
