@@ -14,7 +14,6 @@ const resolvers = {
   Mutation: {
     // login
     login: async (parent, args) => {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
       const user = await User.findOne({
         $or: [{ email: args.email }],
       });
