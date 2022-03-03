@@ -34,13 +34,11 @@ const resolvers = {
       return { user, token };
     },
     //signUp
-    addUser: async (parent, args) => {
+    adduser: async (parent, args) => {
       const user = await User.create({
-        $or: [
-          { username: args.username },
-          { email: args.email },
-          { password: args.password },
-        ],
+        username: args.username,
+        email: args.email,
+        password: args.password,
       });
       if (!user) {
         return { message: "Something is wrong!" };

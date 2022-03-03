@@ -20,9 +20,10 @@ const SignupForm = () => {
 
   const [adduser] = useMutation(ADDUSER, {
     onCompleted: (data) => {
-      const { token } = data.adduser;
-      Auth.adduser(token);
       console.log(data.adduser);
+      const { token } = data.adduser;
+      console.log(token, "tttttttttttttttttttttttttttttt");
+      Auth.adduser(token);
     },
     onError: (error) => {
       console.error(error.message);
@@ -37,6 +38,7 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    console.log(userFormData, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
@@ -45,23 +47,11 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
-    // try {
-    //   const response = await adduser(userFormData);
-
-    //   if (!response.ok) {
-    //     throw new Error("something went wrong!");
-    //   }
-
-    //   const { token, user } = await response.json();
-    //   console.log(user);
-    //   console.log(token);
-
-    //   Auth.login(token);
-    // } catch (err) {
-    //   console.error(err);
-    //   setShowAlert(true);
-    // }
-
+    // console.log(
+    //   userFormData.username,
+    //   userFormData.email,
+    //   userFormData.password
+    // );
     try {
       await adduser({
         variables: {
