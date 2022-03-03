@@ -13,5 +13,18 @@ const LOGIN = gql`
     }
   }
 `;
+const ADDUSER = gql`
+  mutation ($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+        password
+      }
+    }
+  }
+`;
 
-export { LOGIN };
+export { LOGIN, ADDUSER };

@@ -35,13 +35,24 @@ const resolvers = {
     },
     //signUp
     addUser: async (parent, args) => {
-      const user = await User.create(args);
+      const user = await User.create({
+        $or: [
+          { username: args.username },
+          { email: args.email },
+          { password: args.password },
+        ],
+      });
       if (!user) {
         return { message: "Something is wrong!" };
       }
 
       // retrieve the token
-      const token = signToken(user);
+      const token = signToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+      });
       return { token, user };
     },
     // saveBook
