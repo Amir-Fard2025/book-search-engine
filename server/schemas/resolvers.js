@@ -8,7 +8,6 @@ const resolvers = {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError("Please login first!");
-      // return "Hello World";
     },
   },
   Mutation: {
@@ -26,7 +25,7 @@ const resolvers = {
       }
       // retrieve the token
       const token = signToken({
-        id: user.id,
+        _id: user.id,
         username: user.username,
         email: user.email,
       });
@@ -35,12 +34,14 @@ const resolvers = {
     },
     //signUp
     adduser: async (parent, args) => {
+      console.log(args);
       const user = await User.create({
         username: args.username,
         email: args.email,
         password: args.password,
       });
       if (!user) {
+        console.log("Error in adding a user");
         return { message: "Something is wrong!" };
       }
 

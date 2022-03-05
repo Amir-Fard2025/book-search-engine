@@ -4,6 +4,7 @@ const db = require("./config/connection");
 // const routes = require("./routes");
 const { typeDefs, resolvers } = require("./schemas");
 const { ApolloServer } = require("apollo-server-express");
+const { authMiddlewareGraphQL } = require("./utils/auth");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -14,6 +15,7 @@ app.use(express.json());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: authMiddlewareGraphQL,
 });
 
 const serverStart = async () => {
