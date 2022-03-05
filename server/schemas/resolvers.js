@@ -29,7 +29,6 @@ const resolvers = {
         username: user.username,
         email: user.email,
       });
-
       return { user, token };
     },
     //signUp
