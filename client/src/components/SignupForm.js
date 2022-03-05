@@ -18,18 +18,17 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [adduser] = useMutation(ADDUSER, {
-    onCompleted: (data) => {
-      console.log(data.adduser);
-      const { token } = data.adduser;
-      console.log(token, "tttttttttttttttttttttttttttttt");
-      Auth.adduser(token);
-    },
-    onError: (error) => {
-      console.error(error.message);
-      throw new Error("Something went wrong!");
-    },
-  });
+  const [adduser] = useMutation(ADDUSER);
+  // const [adduser] = useMutation(ADDUSER, {
+  //   onCompleted: (data) => {
+  //     console.log(data.adduser);
+
+  //   },
+  //   onError: (error) => {
+  //     console.error(error.message);
+  //     throw new Error("Something went wrong!");
+  //   },
+  // });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -53,13 +52,16 @@ const SignupForm = () => {
     //   userFormData.password
     // );
     try {
-      await adduser({
+      const response = await adduser({
         variables: {
-          username: userFormData.username,
-          email: userFormData.email,
-          password: userFormData.password,
+          ...userFormData,
         },
       });
+      console.log(response);
+      // Signed up successfully
+      const { token, user } = response.data.adduser;
+      console.log(user);
+      Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);

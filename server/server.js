@@ -53,6 +53,7 @@ db.once("open", () => {
 //   await server.start();
 //   // apply server as a middlewear
 //   server.applyMiddleware({ app });
+// app.use(routes);
 
 //   db.once("open", () => {
 //     app.listen(PORT, () =>
