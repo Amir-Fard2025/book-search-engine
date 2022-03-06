@@ -5,7 +5,7 @@ import { Form, Button, Alert } from "react-bootstrap";
 
 // import { loginUser } from "../utils/API";
 import Auth from "../utils/auth";
-import { LOGIN } from "../mutation";
+import { LOGIN } from "../utils/mutation";
 
 const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
@@ -43,8 +43,7 @@ const LoginForm = () => {
     try {
       const res = await login({
         variables: {
-          email: userFormData.email,
-          password: userFormData.password,
+          ...userFormData,
         },
       });
       const { token } = res.data.login;

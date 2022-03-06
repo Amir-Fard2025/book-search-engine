@@ -54,8 +54,8 @@ const resolvers = {
       return { token, user };
     },
     // saveBook
-    saveBook: async () => {
-      console.log("Hello World");
+    saveBook: async (parent, args) => {
+      return { message: " Implementation is in progress" };
     },
   },
 };
