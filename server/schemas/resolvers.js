@@ -54,7 +54,30 @@ const resolvers = {
       return { token, user };
     },
     // saveBook
-    saveBook: async (parent, args) => {
+    saveBook: async (parent, { input }, context) => {
+      console.log(context.user._id);
+      const { _id } = context.user;
+      try {
+        return await User.findOneAndUpdate(
+          { _id },
+          { $push: { savedBooks: input } },
+          { new: true, runValidators: true }
+        ).populate("savedBooks");
+      } catch (error) {
+        console.error(error.message);
+      }
+
+      // try {
+      //   const updatedUser = await User.findOneAndUpdate(
+      //     { _id: user._id },
+      //     { $addToSet: { savedBooks: body } },
+      //     { new: true, runValidators: true }
+      //   );
+      //   return res.json(updatedUser);
+      // } catch (err) {
+      //   console.log(err);
+      //   return res.status(400).json(err);
+      // }
       return { message: " Implementation is in progress" };
     },
   },
