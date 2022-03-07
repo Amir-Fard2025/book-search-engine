@@ -26,7 +26,6 @@ const serverStart = async () => {
 };
 
 serverStart();
-
 app.use(
   express.urlencoded({
     extended: false,

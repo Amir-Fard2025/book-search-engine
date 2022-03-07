@@ -1,11 +1,12 @@
-const { AuthenticationError } = require("apollo-server-express");
 const { User } = require("../models");
 const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
+
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError("Please login first!");
     },
@@ -53,33 +54,41 @@ const resolvers = {
       });
       return { token, user };
     },
-    // saveBook
-    saveBook: async (parent, { input }, context) => {
-      console.log(context.user._id);
-      const { _id } = context.user;
-      try {
-        return await User.findOneAndUpdate(
-          { _id },
-          { $push: { savedBooks: input } },
-          { new: true, runValidators: true }
-        ).populate("savedBooks");
-      } catch (error) {
-        console.error(error.message);
-      }
 
-      // try {
-      //   const updatedUser = await User.findOneAndUpdate(
-      //     { _id: user._id },
-      //     { $addToSet: { savedBooks: body } },
-      //     { new: true, runValidators: true }
-      //   );
-      //   return res.json(updatedUser);
-      // } catch (err) {
-      //   console.log(err);
-      //   return res.status(400).json(err);
-      // }
-      return { message: " Implementation is in progress" };
+    saveBook: async (parent, args, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      } else {
+        try {
+          if (!args.book.description) {
+            args.book.description = "No description";
+          }
+          const updateUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $addToSet: { savedBooks: { ...args.book } } },
+            { new: true, runValidators: true }
+          );
+          return updateUser;
+        } catch (error) {
+          return { message: "Something went wrong while adding a book" };
+        }
+      }
+      // saveBook: async (parent, args, context) => {
+      //   console.log(context.user._id);
+      //   const { _id } = context.user;
+      //   try {
+      //     return await User.findOneAndUpdate(
+      //       { _id },
+      //       { $push: { savedBooks: args.book } },
+      //       { new: true, runValidators: true }
+      //     ).populate("savedBooks");
+      //   } catch (error) {
+      //     console.error(error.message);
+      //   }
+      // },
+      // },
     },
   },
 };
+
 module.exports = resolvers;

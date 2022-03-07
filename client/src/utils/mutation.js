@@ -26,5 +26,12 @@ const ADDUSER = gql`
     }
   }
 `;
+const SAVEBOOK = gql`
+  mutation ($book: BookData!) {
+    saveBook(book: $book) {
+      username
+    }
+  }
+`;
 
-export { LOGIN, ADDUSER };
+export { LOGIN, ADDUSER, SAVEBOOK };
